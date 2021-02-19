@@ -225,15 +225,13 @@ class Command(BaseCommand):
 
                         if key in offline_manifest:
                             continue
-
+                        
                         try:
                             result = parser.render_node(template, context, node)
                         except Exception as e:
                             raise CommandError("An error occurred during rendering %s: "
                                                "%s" % (template.template_name, smart_str(e)))
-                        result = result.replace(
-                            settings.COMPRESS_URL, settings.COMPRESS_URL_PLACEHOLDER
-                        )
+                                               
                         offline_manifest[key] = result
                         context.pop()
                         results.append(result)
@@ -246,7 +244,7 @@ class Command(BaseCommand):
                 "--extension=EXTENSIONS")
 
         if verbosity >= 1:
-            log.write("done\nCompressed %d block(s) from %d template(s) for %d context(s).\n" %
+            log.write("Done!\nCompressed %d block(s) from %d template(s) for %d context(s).\n" %
                       (block_count, nodes_count, contexts_count))
         return offline_manifest, block_count, results
 

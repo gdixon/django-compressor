@@ -65,18 +65,12 @@ class CompressorMixin(object):
         If enabled and in offline mode, and not forced check the offline cache
         and return the result if given
         """
+
         original_content = self.get_original_content(context)
         key = get_offline_hexdigest(original_content)
         offline_manifest = get_offline_manifest()
         if key in offline_manifest:
-            return offline_manifest[key].replace(
-                settings.COMPRESS_URL_PLACEHOLDER,
-                # Cast ``settings.COMPRESS_URL`` to a string to allow it to be
-                # a string-alike object to e.g. add ``SCRIPT_NAME`` WSGI param
-                # as a *path prefix* to the output URL.
-                # See https://code.djangoproject.com/ticket/25598.
-                str(settings.COMPRESS_URL)
-            )
+            return offline_manifest[key]
         else:
             raise OfflineGenerationError('You have offline compression '
                 'enabled but key "%s" is missing from offline manifest. '

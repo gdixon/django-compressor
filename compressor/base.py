@@ -378,6 +378,9 @@ class Compressor(object):
         self.context['compressed'].update(context or {})
         self.context['compressed'].update(self.extra_context)
 
+        # prefix the url with absolute path from COMPRESS_URL
+        self.context['compressed']['url'] = (settings.COMPRESS_URL if settings.COMPRESS_URL else "") + self.context['compressed']['url']
+
         if hasattr(self.context, 'flatten'):
             # Passing Contexts to Template.render is deprecated since Django 1.8.
             final_context = self.context.flatten()
