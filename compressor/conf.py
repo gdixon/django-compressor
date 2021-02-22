@@ -38,6 +38,12 @@ class CompressorConf(AppConf):
 
     CSS_HASHING_METHOD = 'mtime'
 
+    # Allow the placeholder insertion to be skipped
+    SKIP_PLACEHOLDER = False
+
+    # Allow for the full path (url) to be included in the manifest
+    INCLUDE_URLS = False
+
     PRECOMPILERS = (
         # ('text/coffeescript', 'coffee --compile --stdio'),
         # ('text/less', 'lessc {infile} {outfile}'),

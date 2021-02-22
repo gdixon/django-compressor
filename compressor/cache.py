@@ -71,24 +71,32 @@ def get_offline_manifest_filename():
     return os.path.join(output_dir, settings.COMPRESS_OFFLINE_MANIFEST)
 
 
-_offline_manifest = None
-
-
 def get_offline_manifest():
-    global _offline_manifest
+    # get the filename we want to load (manifest.json)
+    filename = get_offline_manifest_filename()
+    # get the cached entry
+    _offline_manifest = cache.get("offline.%s" % filename)
+    # if missing pull from storage mechanism
     if _offline_manifest is None:
-        filename = get_offline_manifest_filename()
+        # check if default_storage has the manifest stored
         if default_storage.exists(filename):
             with default_storage.open(filename) as fp:
+                # read content from file
                 _offline_manifest = json.loads(fp.read().decode('utf8'))
+                # store content in cache
+                cache.set("offline.%s" % filename, _offline_manifest)
         else:
+            # start a new manifest
             _offline_manifest = {}
+
     return _offline_manifest
 
 
 def flush_offline_manifest():
-    global _offline_manifest
-    _offline_manifest = None
+    # get the filename we want to load (manifest.json)
+    filename = get_offline_manifest_filename()
+    # clear the cached entry
+    cache.set("offline.%s" % filename, None)
 
 
 def write_offline_manifest(manifest):

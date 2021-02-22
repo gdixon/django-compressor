@@ -70,6 +70,17 @@ class CompressorMixin(object):
         key = get_offline_hexdigest(original_content)
         offline_manifest = get_offline_manifest()
         if key in offline_manifest:
+            # if !disabled then replace the URL_PLACEHOLDER with the COMPRESS_URL
+            if not settings.COMPRESS_SKIP_PLACEHOLDER: 
+                offline_manifest[key] = offline_manifest[key].replace(
+                    settings.COMPRESS_URL_PLACEHOLDER,
+                    # Cast ``settings.COMPRESS_URL`` to a string to allow it to be
+                    # a string-alike object to e.g. add ``SCRIPT_NAME`` WSGI param
+                    # as a *path prefix* to the output URL.
+                    # See https://code.djangoproject.com/ticket/25598.
+                    str(settings.COMPRESS_URL)
+                )
+            # return the manifest entry without the COMPRESS_URL_PLACEHOLDER
             return offline_manifest[key]
         else:
             raise OfflineGenerationError('You have offline compression '

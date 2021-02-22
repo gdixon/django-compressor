@@ -231,7 +231,13 @@ class Command(BaseCommand):
                         except Exception as e:
                             raise CommandError("An error occurred during rendering %s: "
                                                "%s" % (template.template_name, smart_str(e)))
-                                               
+
+                        # if !disabled then replace COMPRESS_URL with the placeholder
+                        if not settings.COMPRESS_SKIP_PLACEHOLDER:
+                            result = result.replace(
+                                str(settings.COMPRESS_URL), settings.COMPRESS_URL_PLACEHOLDER
+                            )
+
                         offline_manifest[key] = result
                         context.pop()
                         results.append(result)
