@@ -379,7 +379,8 @@ class Compressor(object):
         self.context['compressed'].update(self.extra_context)
 
         # Check if we should include the full URL in the template
-        if (settings.COMPRESS_INCLUDE_URLS and settings.COMPRESS_OFFLINE and 
+        if ('url' in self.context['compressed'] and 
+            settings.COMPRESS_INCLUDE_URLS and settings.COMPRESS_OFFLINE and
             settings.COMPRESS_URL not in self.context['compressed']['url']):
             # Prefix the url with the basename as defined by COMPRESS_URL
             self.context['compressed']['url'] = (str(settings.COMPRESS_URL) + 
