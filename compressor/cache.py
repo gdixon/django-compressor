@@ -84,7 +84,7 @@ def get_offline_manifest():
                 # read content from file
                 _offline_manifest = json.loads(fp.read().decode('utf8'))
                 # store content in cache
-                cache.set("offline.%s" % filename, _offline_manifest)
+                cache.set("offline.%s" % filename, _offline_manifest, 86400)
         else:
             # start a new manifest
             _offline_manifest = {}
